@@ -5,7 +5,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 
-class EntryModel(BaseModel):
+class GameModel(BaseModel):
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
     questions: dict = Field(...)
     answers: dict = Field(...)
@@ -23,7 +23,7 @@ class EntryModel(BaseModel):
     }
 
 
-class UpdateEntryModel(BaseModel):
+class UpdateGameModel(BaseModel):
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
     questions: dict = Field(...)
     answers: dict = Field(...)

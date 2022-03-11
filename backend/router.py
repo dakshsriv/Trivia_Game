@@ -2,13 +2,18 @@ from http.client import NO_CONTENT, HTTPResponse
 from fastapi import APIRouter, Body, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from models import EntryModel, UpdateEntryModel
+from models import GameModel, UpdateGameModel
 
 router = APIRouter()
 
 @router.get("/", response_description="Test call")
 async def get():
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+@router.get("/api/mvp/", response_description="List all games")
+async def get_games(request: Request):
+    games = [{"name": "What does 'www' stand for in a website browser", "answer":"World Wide Web", "responses":["World Wide Web", "World Wire Web", "Wide World Web", "World Web Wire"]}, {"name": "What is the capital of Canada", "answer":"Ottawa", "responses":["Montreal", "Ottawa", "Toronto", "Vancouver"]}]
+    return games
 
 @router.get("/api/", response_description="List all games")
 async def get_games(request: Request):
@@ -27,7 +32,7 @@ async def get_one_game(id: str, request: Request):
     return game
 
 @router.post("/api/", response_description="Log a new game")
-async def post_game(request: Request, game: EntryModel = Body(...)):
+async def post_game(request: Request, game: GameModel = Body(...)):
     game = jsonable_encoder(game)
     new_game = await request.app.mongodb["Games"].insert_one(game)
     created_game = await request.app.mongodb["Games"].find_one(
@@ -38,7 +43,7 @@ async def post_game(request: Request, game: EntryModel = Body(...)):
 
 
 @router.put("/api/{id}", response_description="Update an existing game")
-async def put_game(id: str, request: Request, game: UpdateEntryModel = Body(...)):
+async def put_game(id: str, request: Request, game: UpdateGameModel = Body(...)):
     game = {k: v for k, v in game.dict().items() if v is not None}
     if len(game) >= 1:
         update_result = await request.app.mongodb["Games"].update_one(
