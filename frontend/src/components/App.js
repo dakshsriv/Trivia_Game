@@ -13,7 +13,6 @@ class App extends Component {
       })
       .then(response => {
         this.setState({questions: response.data, requested: true});
-        console.log(this.state.isPlaying);
       }) }}
 
   render() {
