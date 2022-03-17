@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import axios from 'axios'
+import axios from 'axios';
 
 function Create() {
   const [name, setName] = useState("");
   const [answer, setAnswer] = useState("");
   const [responses, setResponses] = useState(["", "", "", ""]);
-  const [timer, setTimer] = useState(0);
   const [category, setCategory] = useState("");
+  const [chooseRightAnswer, setChooseRightAnswer] = useState(false);
 
   const aidList = [0,1,2,3];
 
@@ -17,34 +17,38 @@ function Create() {
   }
 
   function submitForm() {
-    console.log('submit')
+    const requestParams = {"name": name, "answer": answer, "responses": responses, "category": category};
+    console.log(requestParams)
+    if (answer !== "") {
+    axios.post("http://127.0.0.1:8000/api/", requestParams).then(res => console.log(res.data)) }
+    else {
+      setChooseRightAnswer(true)
+    }
   }
 
   return(
     <div>
       <form onSubmit={submitForm}>
-        {console.log(name, answer, responses, timer, category)}
+        {console.log(name, answer, responses, category)}
         <input type="Text" onChange={(event) => setName(event.target.value)} value={name} placeholder="Question name" required/>
         {aidList.map((index) => 
           <div key={index}>
             <input  type="text"
             placeholder={["Response", (parseInt(index)+1).toString()].join(" ")}
-            onChange={(event) => updateResponse(event, index)}
+            onChange={(event) => updateResponse(event, index)} required
             />
-            <button onClick={(index) => setAnswer(responses[index])}>Correct Answer</button>
+            <button type="button" onClick={() => {setAnswer(responses[index]);setChooseRightAnswer(false)}} required>Correct Answer</button>
           </div>
         )}
-        How long for the question:
-        <input value={timer}type="number" onChange={(event) => setTimer(event.target.value)}/>
-        <select name="Category" size="4"
-        value={category}
-        onChange={(event) => setCategory(event.target.value)}>  
-  <option> World </option>  
-  <option> Sports </option>  
-  <option> Disney </option>  
-  <option> Canada </option>  
-    </select>  
-        <input type="submit" name="Submit"/>
+        {chooseRightAnswer ? <p style={{"color":"red"}}>Choose a correct answer</p> : null}
+        <select size="4" value={category} onChange={(event) => setCategory(event.target.value)} required>
+          <option> World </option> 
+          <option> Math </option>  
+          <option> Sports </option>  
+          <option> Disney </option>  
+          <option> Canada </option>  
+        </select>  
+        <button type="button" onClick={() => submitForm()}>Submit</button>
       </form>
     </div>)   
 }
