@@ -1,62 +1,71 @@
-import React, { useState, useEffect} from 'react';
+import React, {Component} from 'react';
 
-function Game(props) {
-  const [correctAnswers, setCorrectAnswers] = useState(0);
-  const [questionIndex, setQuestionIndex] = useState(0);
-  const [question, setQuestion] = useState(props.questions[questionIndex]);
-  const [isEndScreen, setIsEndScreen] = useState(false);
-  const [timer, setTimer] = useState(props.questions[0].timer);
-  const length = props.questions.length;
+class Game extends Component{
+  state = {correctAnswers: 0, questionIndex: 0, question : this.props.questions[0], isEndScreen:false, len: this.props.questions.length, time:{}, seconds:5}
+  
+  timer = 0;
 
-  useEffect (() => 
-  {
-      
-      //startTimer()
-  }, [])
-    
-    /* function startTimer() {
-        if (timer > 0) {
-            var preTimer = timer - 1;
-            
-            setCountDown(setInterval(function() {setTimer(preTimer)}, 1000))
-        }
-    } */
-    //const [question, setQuestion] = useState(Object.keys(props.questions)[questionIndex]);
-    //const [questionData, setQuestionData] = useState(Object.values(props.questions)[questionIndex]);
-      
-  function checkAnswer(response, answer){
-    console.log(response, answer, length)
-    if (response === answer) {              
-      setCorrectAnswers(correctAnswers + 1);
-    }
-    var newIndex = questionIndex + 1;
-    setQuestionIndex(newIndex);
-    setQuestion(props.questions[questionIndex+1])
-    
-    if (questionIndex+1 === length) {
-      setIsEndScreen(true);
-    }
+  componentDidMount() {
+    let timeLeftVar = this.secondsToTime(this.state.seconds);
+    this.setState({ time: timeLeftVar });
+    this.startTimer()
   }
 
+  startTimer = () => {
+    if (this.timer === 0 && this.state.seconds > 0) {
+      this.timer = setInterval(this.countDown, 1000);
+    }
+  }
+     
+  secondsToTime = (secs) => {
+    let hours = Math.floor(secs / (60 * 60));
+
+    let divisor_for_minutes = secs % (60 * 60);
+    let minutes = Math.floor(divisor_for_minutes / 60);
+
+    let divisor_for_seconds = divisor_for_minutes % 60;
+    let seconds = Math.ceil(divisor_for_seconds);
+
+    let obj = {
+      h: hours,
+      m: minutes,
+      s: seconds
+    };
+    return obj;
+  }
+
+  checkAnswer = (response, answer) => {
+    console.log(response, answer, this.state.len)
+    if (response === answer) {   
+      this.setState({correctAnswers : this.state.correctAnswers + 1})           
+    }
+    var newIndex = this.state.questionIndex + 1;
+    this.setState({questionIndex: newIndex, question: this.props.questions[this.state.questionIndex+1]})
+    
+    if (this.state.questionIndex+1 === this.state.len) {
+      this.setState({isEndScreen: true})
+    }
+  }
+  render() {
   return (
   <div>
-    {console.log(timer)}
-    {isEndScreen ? 
+    {console.log(this.timer)}
+    {this.state.isEndScreen ? 
     <div>
-      You got {correctAnswers}/{length} correct.
-      <button onClick={props.callBackFunction}>Return to home</button>
+      You got {this.state.correctAnswers}/{this.state.len} correct.
+      <button onClick={this.props.callBackFunction}>Return to home</button>
   </div> : 
   <div>
-      <div key={question.id}>
-      <p>{question.name}</p>
-      {question.responses.map(response => <button onClick={() => {console.log(question);checkAnswer(response, question.answer, props.questions.length)}}>{response}</button>)}
+      <div key={this.state.question.id}>
+      <p>{this.state.question.name}</p>
+      {this.state.question.responses.map(response => <button onClick={() => {console.log(this.state.question);this.checkAnswer(response, this.state.question.answer, this.props.questions.length)}}>{response}</button>)}
       </div>
     <br/>
-    Correct Answers: {correctAnswers}
-    Time: {timer}
+    Correct Answers: {this.state.correctAnswers}
+    Time: {this.timer}
     Fix the timer!
     </div>}
-  </div>)
+  </div>) }
 }
 
 export default Game;
