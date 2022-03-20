@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 
-function Create() {
+function Create(props) {
   const [name, setName] = useState("");
   const [answer, setAnswer] = useState("");
   const [responses, setResponses] = useState(["", "", "", ""]);
@@ -20,7 +20,9 @@ function Create() {
     const requestParams = {"name": name, "answer": answer, "responses": responses, "category": category};
     console.log(requestParams)
     if (answer !== "") {
-    axios.post("http://127.0.0.1:8000/api/", requestParams).then(res => console.log(res.data)) }
+    axios.post("http://127.0.0.1:8000/api/", requestParams).then(res => console.log(res.data));
+    return props.callBackFunction();
+  }
     else {
       setChooseRightAnswer(true)
     }

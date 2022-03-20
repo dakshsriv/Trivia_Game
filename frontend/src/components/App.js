@@ -22,7 +22,7 @@ class App extends Component {
     <div>
       {(this.state.isPlaying && !this.state.isCreate) ? 
       <Game questions={this.state.questions} callBackFunction={() => this.setState({isPlaying: false, requested: false})}/>: 
-      <div>{(this.state.isCreate && !this.state.isPlaying) ? <Create/> : 
+      <div>{(this.state.isCreate && !this.state.isPlaying) ? <Create callBackFunction={() => this.setState({isCreate: false})}/> : 
         <div><button onClick={(event) => this.setState({isPlaying: true})}>Play game</button><button onClick={(event) => this.setState({isCreate: true})}>Create question</button></div>}</div>}
       
     </div>);
