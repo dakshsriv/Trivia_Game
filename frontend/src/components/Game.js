@@ -1,7 +1,12 @@
+import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 import { useTimer } from 'react-timer-hook';
 
 function Game(props) {
+  const [questions, setQuestions] = useState([]);
+  useEffect(() => {
+    axios.get("localhost:3000/api/").then(response => {setQuestions(response.data);setQuestion(response.data[0])});
+  })
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [question, setQuestion] = useState(props.questions[0]);
@@ -48,7 +53,9 @@ function Game(props) {
 
   return (
   <div>
-    {isEndScreen ? 
+    {!props.question ? <div>No questions <button onClick={props.callBackFunction}>Return to home</button></div> : 
+    <div>
+      {isEndScreen ? 
     <div>
       You got {correctAnswers}/{len} correct.
       <button onClick={props.callBackFunction}>Return to home</button>
@@ -64,6 +71,7 @@ function Game(props) {
     {(minutes.toString()).padStart(2, "0")}:{(seconds.toString()).padStart(2, "0")}
     </div>
     </div>}
+    </div>} 
   </div>) 
 }
 

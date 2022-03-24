@@ -17,12 +17,10 @@ async def get_questions(request: Request):
 
 @router.get("/api/", response_description="List all questions")
 async def get_questions(request: Request):
-    questions_first = []
+    questions = list()
     docs = request.app.mongodb["Questions"].find()
     for doc in await request.app.mongodb["Questions"].find().to_list(length=10000):
-        questions_first.append(doc)
-    questions = sorted(questions_first, key=lambda x: x['creation_time'])
-    questions.reverse()
+        questions.append(doc)
     return questions
 
 
