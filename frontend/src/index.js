@@ -38,7 +38,7 @@ class Renders extends Component {
             <Route
               key={routePoint}
               path={["/", routePoint].join("")}
-              element={<Game/>}
+              element={<Game questions={5} />}
             />
           ))}
         </Routes>
