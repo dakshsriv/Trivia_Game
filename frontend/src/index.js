@@ -4,19 +4,17 @@ import App from "./components/App";
 import Game from "./components/Game"
 import './index.css';
 import React, { Component } from "react";
-import axios from 'axios'
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 class Renders extends Component {
-  state = { routesList: ["testRoute", "testRoute2"], questions : null, requested: false};
+  state = { routes: {"testRoute":"World", "testRoute2":"Hello"},routesList: ["testRoute", "testRoute2"], requested: false};
 
   addRoute = (route, category) => {
     this.setState(
       (previousState) => ({
-        routesList: [...previousState.routesList, route]
+        routes: {...previousState.routes, ...{[route]:category}}
       }),
-      console.log(this.state.routesList)
-    );
+      console.log(Object.keys(this.state.routes)))
   };
 
   render() {
@@ -26,19 +24,19 @@ class Renders extends Component {
           <li>
             <Link to="/">Home</Link>
           </li>
-          {this.state.routesList.map((path) => (
+          {Object.keys(this.state.routes).map((path) => (
             <li key={path}>
               <Link to={`/${path}`}>{path}</Link>
             </li>
           ))}
         </ul>
         <Routes>
-          <Route path="/" element={<App callBackFunction={this.addRoute} questions={this.questions}/>} />
-          {this.state.routesList.map((routePoint) => (
+          <Route path="/" element={<App callBackFunction={this.addRoute}/>} />
+          {Object.entries(this.state.routes).map(([routePoint, category]) => (
             <Route
               key={routePoint}
               path={["/", routePoint].join("")}
-              element={<Game questions={5} />}
+              element={<Game key={routePoint} category={category} questions={5} />}
             />
           ))}
         </Routes>

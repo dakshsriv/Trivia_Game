@@ -1,11 +1,15 @@
 import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 import { useTimer } from 'react-timer-hook';
+import {Link} from 'react-router-dom';
 
 function Game(props) {
+  console.log("Category is: ", props.category)
+
   const [questions, setQuestions] = useState([]);
   const [question, setQuestion] = useState(questions[0]);
-  useEffect(() => {axios.get("http://localhost:8000/api/").then((response) => {console.log(response.data);setQuestions(response.data);setQuestion(response.data[0]);setLoading(false)});start()}, [])
+  const requestStr = ["http://localhost:8000/api/",props.category].join("")
+  useEffect(() => {axios.get(requestStr, {category:props.category}).then((response) => {console.log(response.data);setQuestions(response.data);setQuestion(response.data[0]);setLoading(false)});start()}, [])
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isEndScreen, setIsEndScreen] = useState(false);
@@ -51,12 +55,12 @@ function Game(props) {
 
   return (
   <div>
-    {!questions ? <div>No questions <button onClick={props.callBackFunction}>Return to home</button></div> : 
+    {!question ? <div>No questions <Link to="/"><button onClick={props.callBackFunction}>Return to home</button></Link></div> : 
     <div>
       {isEndScreen ? 
     <div>
       You got {correctAnswers}/{questions.length} correct.
-      <button onClick={props.callBackFunction}>Return to home</button>
+      <Link to="/"><button onClick={props.callBackFunction}>Return to home</button></Link>
   </div> : 
   <div>
       {loading ? <p>Loading</p>: <div><div>

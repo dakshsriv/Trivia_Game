@@ -23,8 +23,16 @@ async def get_questions(request: Request):
         questions.append(doc)
     return questions
 
+@router.get("/api/{category}", response_description="List all questions")
+async def get_questions(request: Request, category: str):
+    questions = list()
+    for doc in await request.app.mongodb["Questions"].find().to_list(length=10000):
+        if doc["category"] == category:
+            questions.append(doc)
+    return questions
 
-@router.get("/api/{id}", response_description="Get one question")
+
+@router.get("/api/byId/{id}", response_description="Get one question")
 async def get_one_question(id: str, request: Request):
     question = await request.app.mongodb["Questions"].find_one({"_id": id})
     return question
