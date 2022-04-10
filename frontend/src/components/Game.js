@@ -55,7 +55,7 @@ function Game(props) {
 
   return (
   <div>
-    {!question ? <div>No questions <Link to="/"><button onClick={props.callBackFunction}>Return to home</button></Link></div> : 
+    {(!question && !loading) ? <div>No questions <Link to="/"><button onClick={props.callBackFunction}>Return to home</button></Link></div> : 
     <div>
       {isEndScreen ? 
     <div>
@@ -63,9 +63,9 @@ function Game(props) {
       <Link to="/"><button onClick={props.callBackFunction}>Return to home</button></Link>
   </div> : 
   <div>
-      {loading ? <p>Loading</p>: <div><div>
+      {loading ? <p>Loading...</p>: <div><div>
       <p>{question.name}</p>
-      {question.responses.map(response => <button type="button" onClick={() => {checkAnswer(response, question.answer)}}>{response}</button>)}
+      {question.responses.map(response => <button key={response} type="button" onClick={() => {checkAnswer(response, question.answer)}}>{response}</button>)}
       </div>
     <br/>
     Correct Answers: {correctAnswers}

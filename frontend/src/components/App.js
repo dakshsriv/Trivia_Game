@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import Game from './Game';
+import React, {useState } from 'react';
 import Create from './Create';
-import axios from 'axios';
 
 const makeid = (length) => {
   var result           = '';
@@ -15,17 +13,17 @@ charactersLength));
 }
 
 
-class App extends Component {
-  state = {isCreate: false};
-
-  render() {
-    return(
-    <div>
-      {(this.state.isCreate) ? <Create callBackFunction={() => this.setState({isCreate: false})}/> : 
-          <button onClick={(event) => this.setState({isCreate: true})}>Create question</button>}
-      <button onClick={() => this.props.callBackFunction(makeid(7), "")}>Create link</button> 
-    </div>);
-  }
+function App(props) {
+  const [isCreate, setIsCreate] = useState("");
+  const [categorySend, setCategorySend] = useState("");
+  return(
+  <div>
+    {(isCreate) ? <Create callBackFunction={() => setIsCreate(false)}/> : 
+        <button onClick={(event) => setIsCreate(true)}>Create question</button>}
+    <input value={categorySend} onChange={(event) => {setCategorySend(event.target.value);console.log(event.target.value)}}/>
+    <button onClick={() => props.callBackFunction(makeid(7), categorySend)}>Create link</button> 
+  </div>);
+  
 }
 
 export default App;
