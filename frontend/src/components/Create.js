@@ -44,11 +44,7 @@ function Create(props) {
         )}
         {chooseRightAnswer ? <p style={{"color":"red"}}>Choose a correct answer</p> : null}
         <select size="4" value={category} onChange={(event) => setCategory(event.target.value)} required>
-          <option> World </option> 
-          <option> Math </option>  
-          <option> Sports </option>  
-          <option> Disney </option>  
-          <option> Canada </option>  
+          {props.categories.map(cs => <option key={cs} value={cs}> {cs} </option> )}
         </select>  
         <button type="button" onClick={() => submitForm()}>Submit</button>
       </form>

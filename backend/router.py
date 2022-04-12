@@ -10,20 +10,27 @@ router = APIRouter()
 async def get():
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-@router.get("/api/mvp/", response_description="List all questions")
+@router.get("/api/mvp/", response_description="List all questions for MVP")
 async def get_questions(request: Request):
     questions = [{"name": "What does 'www' stand for in a website browser", "answer":"World Wide Web", "responses":["World Wide Web", "World Wire Web", "Wide World Web", "World Web Wire"], "timer":6}, {"name": "What is the capital of Canada", "answer":"Ottawa", "responses":["Montreal", "Ottawa", "Toronto", "Vancouver"], "timer":8}]
     return questions
 
+@router.get("/api/categories/", response_description="List all questions")
+async def get_questions(request: Request):
+    questions = list()
+    for doc in await request.app.mongodb["Questions"].find().to_list(length=10000):
+        questions.append(doc)
+    categories = list(set([question["category"] for question in questions]))
+    return categories
+
 @router.get("/api/", response_description="List all questions")
 async def get_questions(request: Request):
     questions = list()
-    docs = request.app.mongodb["Questions"].find()
     for doc in await request.app.mongodb["Questions"].find().to_list(length=10000):
         questions.append(doc)
     return questions
 
-@router.get("/api/{category}", response_description="List all questions")
+@router.get("/api/{category}", response_description="Get all questions of a category")
 async def get_questions(request: Request, category: str):
     questions = list()
     for doc in await request.app.mongodb["Questions"].find().to_list(length=10000):
