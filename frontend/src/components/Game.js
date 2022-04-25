@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 import { useTimer } from 'react-timer-hook';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Game(props) {
   console.log("Category is: ", props.category)
@@ -55,6 +55,7 @@ function Game(props) {
 
   return (
   <div>
+    {props.point}
     {(!question && !loading) ? <div>No questions <Link to="/"><button onClick={props.callBackFunction}>Return to home</button></Link></div> : 
     <div>
       {isEndScreen ? 

@@ -2,7 +2,7 @@ import React, {useState, useEffect } from 'react';
 import Create from './Create';
 import axios from 'axios';
 
-const makeid = (length) => {
+const makeId = (length) => {
   var result = '';
   var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var charactersLength = characters.length;
@@ -12,7 +12,6 @@ charactersLength));
  }
  return result;
 }
-
 
 function App(props) {
   const [loading, setLoading] = useState(true);
@@ -28,6 +27,7 @@ function App(props) {
 
   function handleChange(event) {setCategorySend(event.target.value)}
 
+  console.log(categorySend)
   return(
   <div>
     {loading ? <div>Loading...</div>: 
@@ -37,7 +37,11 @@ function App(props) {
       <select value={categorySend} onChange={handleChange}>
         {categories.map(category => <option key={category} value={category}>{category}</option>)}
       </select>
-      <button onClick={() => props.callBackFunction(makeid(7), categorySend)}>Create link</button>
+      <button onClick={() => {const requestStr = ["http://localhost:8000/api/",categorySend].join("");axios.get(requestStr, {category:categorySend}).then((res) => {
+        const requestParams = {"id":makeId(7),"expiryTime":"7:10","questions":res.data};
+        console.log(requestParams);
+        axios.post("http://localhost:8000/api/game/", requestParams).then(res => console.log(res.data));} //Finish this
+      )}}>Create link</button>
     </div>} 
   </div>);
   
