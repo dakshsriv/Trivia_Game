@@ -100,7 +100,7 @@ async def get_games(id : str, request: Request):
     game = await request.app.mongodb["Games"].find_one({"_id": id})
     return game
 
-@router.post("/api/game/", response_description="Create a game")
+@router.post("/api/games/", response_description="Create a game")
 async def post_question(request: Request, game: GameModel = Body(...)):
     game = jsonable_encoder(game)
     new_game = await request.app.mongodb["Games"].insert_one(game)
@@ -111,7 +111,7 @@ async def post_question(request: Request, game: GameModel = Body(...)):
     return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_game)
 
 
-@router.put("/api/game/{id}", response_description="Update an existing game")
+@router.put("/api/games/{id}", response_description="Update an existing game")
 async def put_game(id: str, request: Request, game: UpdateGameModel = Body(...)):
     game = {k: v for k, v in game.dict().items() if v is not None}
     if len(game) >= 1:
@@ -131,7 +131,7 @@ async def put_game(id: str, request: Request, game: UpdateGameModel = Body(...))
     raise HTTPException(status_code=404, detail=f"Game {id} not found")
 
 
-@router.delete("/api/game/{id}", response_description="Delete an unwanted game")
+@router.delete("/api/games/{id}", response_description="Delete an unwanted game")
 async def delete_question(id: str, request: Request, response: Response):
     delete_result = await request.app.mongodb["Games"].delete_one({"_id": id})
     if delete_result.deleted_count == 1:

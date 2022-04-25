@@ -4,21 +4,29 @@ import { useTimer } from 'react-timer-hook';
 import { Link } from 'react-router-dom';
 
 function Game(props) {
-  console.log("Category is: ", props.category)
-
   const [questions, setQuestions] = useState([]);
   const [question, setQuestion] = useState(questions[0]);
-  const requestStr = ["http://localhost:8000/api/",props.category].join("")
-  useEffect(() => {axios.get(requestStr, {category:props.category}).then((response) => {console.log(response.data);setQuestions(response.data);setQuestion(response.data[0]);setLoading(false)});start()}, [])
+  const requestStr = ["http://localhost:8000/api/games/","xG7xvlI"].join("");
+  const length = 7;
+
+  useEffect(() => {
+    if (loading) {
+    axios.get(requestStr, {id:"xG7xvlI"}).then((response) =>         {
+    setQuestions(response.data.questions);
+    setQuestion(response.data.questions[0]);
+    setLoading(false);
+    });
+    start();}})
+  
+  useEffect(() => {console.log(question)}, [question])
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isEndScreen, setIsEndScreen] = useState(false);
   const [loading, setLoading] = useState(true)
-  const totalTime = props.questions*10//props.questions.length;
   const initTime = new Date();
-  initTime.setSeconds(initTime.getSeconds() + totalTime);
+  initTime.setSeconds(initTime.getSeconds() + length*10);
   const [expiryTimestamp, setExpiryTimestamp] = useState(initTime);
-
+  
   const {
     seconds,
     minutes,
@@ -33,6 +41,7 @@ function Game(props) {
     expiryTimestamp,
     onExpire: () => console.warn("onExpire called")
   });
+  console.log(expiryTimestamp)
 
   const checkAnswer = (response, answer) => {
     console.log("checking")
