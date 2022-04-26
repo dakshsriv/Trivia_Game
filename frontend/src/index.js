@@ -9,8 +9,8 @@ ReactDOM.render(
   <StrictMode>
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="/game/" element={<Game/>} />
+      <Route exact path="/" element={<App />} />
+      <Route exact path="/game/:gameLink" element={<Game/>} />
     </Routes>
   </BrowserRouter>
 </StrictMode>, document.getElementById('root'))

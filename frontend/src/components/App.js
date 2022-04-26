@@ -27,7 +27,6 @@ function App(props) {
 
   function handleChange(event) {setCategorySend(event.target.value)}
 
-  console.log(categorySend)
   return(
   <div>
     {loading ? <div>Loading...</div>: 
@@ -40,7 +39,7 @@ function App(props) {
       <button onClick={() => {const requestStr = ["http://localhost:8000/api/",categorySend].join("");axios.get(requestStr, {category:categorySend}).then((res) => {
         const requestParams = {"id":makeId(7),"expiryTime":"7:10","questions":res.data};
         console.log(requestParams);
-        axios.post("http://localhost:8000/api/game/", requestParams).then(res => console.log(res.data));} //Finish this
+        axios.post("http://localhost:8000/api/games/", requestParams).then(res => console.log(res.data));} //Finish this
       )}}>Create link</button>
     </div>} 
   </div>);
