@@ -10,6 +10,7 @@ ReactDOM.render(
   <BrowserRouter>
     <Routes>
       <Route exact path="/" element={<App />} />
+      <Route exact path="/game/" element={<div>Please enter a game link as a URL extension</div>} />
       <Route exact path="/game/:gameLink" element={<Game/>} />
     </Routes>
   </BrowserRouter>

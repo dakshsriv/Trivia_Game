@@ -18,22 +18,24 @@ function Game(props) {
     setQuestions(response.data.questions);
     setQuestion(response.data.questions[0]);
     setLength(response.data.questions.length);
-    setLoading(false); }
+    setLoading(false);
+    setExpiryTime(response.data.expiryTime) }
     else {
       setLoading(false)
     }
     });
     start();}})
   
-  useEffect(() => {console.log(question)}, [question])
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isEndScreen, setIsEndScreen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [lengthSet, setLengthSet] = useState(false)
   const initTime = new Date();
+  const prepTime = Date.parse(initTime);
   initTime.setSeconds(initTime.getSeconds() + length*10);
   const [expiryTimestamp, setExpiryTimestamp] = useState(initTime);
+  const [expiryTime, setExpiryTime] = useState(0);
   
   const {
     seconds,
@@ -71,6 +73,7 @@ function Game(props) {
 
   return (
   <div>
+    <div></div>
     {props.point}
     {(!question && !loading) ? <div>No questions <Link to="/"><button onClick={props.callBackFunction}>Return to home</button></Link></div> : 
     <div>
@@ -80,7 +83,9 @@ function Game(props) {
       <Link to="/"><button onClick={props.callBackFunction}>Return to home</button></Link>
   </div> : 
   <div>
-      {loading ? <p>Loading...</p>: <div><div>
+      {loading ? <p>Loading...</p>: <div>
+        {(expiryTime < prepTime) ? <div>Expired, {expiryTime}, {prepTime}</div>: 
+        <div><div>
       <p>{question.name}</p>
       {question.responses.map(response => <button key={response} type="button" onClick={() => {checkAnswer(response, question.answer)}}>{response}</button>)}
       </div>
@@ -89,6 +94,7 @@ function Game(props) {
     <div>
     {(minutes.toString()).padStart(2, "0")}:{(seconds.toString()).padStart(2, "0")}
     </div></div>}
+    </div>}
       
     </div>}
     </div>} 

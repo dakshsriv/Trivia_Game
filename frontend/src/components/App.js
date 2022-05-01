@@ -19,6 +19,8 @@ function App(props) {
   const [categories, setCategories] = useState([]);
   const [isCreate, setIsCreate] = useState("");
   const [categorySend, setCategorySend] = useState("");
+  const [expireTime, setExpireTime] = useState("");
+  const [expireTimeFin, setExpireTimeFin] = useState("");
 
   useEffect(() => {
     if (!requested) {
@@ -26,6 +28,14 @@ function App(props) {
       setRequested(true);setLoading(false);}},[requested])
 
   function handleChange(event) {setCategorySend(event.target.value)}
+
+  useEffect(() => {
+    const x = new Date(expireTime);
+    const ts = Date.parse(x);
+    console.log(x, ts);
+    if (isNaN(ts) === false) {
+    setExpireTimeFin(ts); }
+  }, [expireTime])
 
   return(
   <div>
@@ -36,8 +46,9 @@ function App(props) {
       <select value={categorySend} onChange={handleChange}>
         {categories.map(category => <option key={category} value={category}>{category}</option>)}
       </select>
+      <input type="text" onChange={(event) => setExpireTime(event.target.value)}/>
       <button onClick={() => {const requestStr = ["http://localhost:8000/api/",categorySend].join("");axios.get(requestStr, {category:categorySend}).then((res) => {
-        const requestParams = {"id":makeId(7),"expiryTime":"7:10","questions":res.data};
+        const requestParams = {"id":makeId(7),"expiryTime":expireTimeFin,"questions":res.data};
         console.log(requestParams);
         axios.post("http://localhost:8000/api/games/", requestParams).then(res => console.log(res.data));} //Finish this
       )}}>Create link</button>

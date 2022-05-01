@@ -49,7 +49,7 @@ def makeLink():
 
 class GameModel(BaseModel):
     id: str = Field(default_factory=makeLink, alias="_id")
-    expiryTime: str = Field(...)
+    expiryTime: int = Field(...)
     questions: list = Field(...)
 
     class Config:
@@ -57,7 +57,7 @@ class GameModel(BaseModel):
         schema_extra = {
             "example": {
                 "_id":"xG7xvlI",
-                "expiryTime":"7:53",
+                "expiryTime":1521462189,
                 "questions":[{
                     "name":"What isn't 1+1?",
                     "answer":"Too",
@@ -70,14 +70,14 @@ class GameModel(BaseModel):
 
 
 class UpdateGameModel(BaseModel):
-    expiryTime: str = Field(...)
+    expiryTime: int = Field(...)
     questions: list = Field(...)
 
     class Config:
         allow_population_by_field_name = True
         schema_extra = {
             "example": {
-                "expiryTime":"7:59",
+                "expiryTime":1321462189,
                 "questions":[{
                     "name":"What isn't 1+3?",
                     "answer":"For",
