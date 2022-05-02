@@ -87,3 +87,28 @@ class UpdateGameModel(BaseModel):
 
             }
     }
+
+class PlayerModel(BaseModel):
+    id: str = Field(..., alias="_id")
+    score: int = Field(...)
+
+    class Config:
+        allow_population_by_field_name = True
+        schema_extra = {
+            "example": {
+                "_id":"Winner",
+                "score":24
+            }
+    }
+
+
+class UpdatePlayerModel(BaseModel):
+    score: int = Field(...)
+
+    class Config:
+        allow_population_by_field_name = True
+        schema_extra = {
+            "example": {
+                "score":22
+            }
+    }

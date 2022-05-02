@@ -9,6 +9,25 @@ function Game(props) {
   const { gameLink } = useParams();
   const requestStr = ["http://localhost:8000/api/games/",gameLink].join("");
   const [length, setLength] = useState(7);
+  const [username, setUsername] = useState("");
+  const [isSetUp, setIsSetUp] = useState(false);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [isEndScreen, setIsEndScreen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [lengthSet, setLengthSet] = useState(false)
+  const initTime = new Date();
+  const prepTime = Date.parse(initTime);
+  initTime.setSeconds(initTime.getSeconds() + length*10);
+  const [expiryTimestamp, setExpiryTimestamp] = useState(initTime);
+  const [expiryTime, setExpiryTime] = useState(0);
+
+  
+  function sendAnswer() {
+    const sendDict = {"_id": username, "score": correctAnswers}
+    console.log("reached")
+    axios.post("http://localhost:8000/api/players/", sendDict);
+  }
 
   useEffect(() => {
     if (loading) {
@@ -25,18 +44,10 @@ function Game(props) {
     }
     });
     start();}})
-  
-  const [correctAnswers, setCorrectAnswers] = useState(0);
-  const [questionIndex, setQuestionIndex] = useState(0);
-  const [isEndScreen, setIsEndScreen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [lengthSet, setLengthSet] = useState(false)
-  const initTime = new Date();
-  const prepTime = Date.parse(initTime);
-  initTime.setSeconds(initTime.getSeconds() + length*10);
-  const [expiryTimestamp, setExpiryTimestamp] = useState(initTime);
-  const [expiryTime, setExpiryTime] = useState(0);
-  
+
+  useEffect(() => {if (username !== "") {sendAnswer();}}, [isEndScreen])
+
+
   const {
     seconds,
     minutes,
@@ -73,7 +84,6 @@ function Game(props) {
 
   return (
   <div>
-    <div></div>
     {props.point}
     {(!question && !loading) ? <div>No questions <Link to="/"><button onClick={props.callBackFunction}>Return to home</button></Link></div> : 
     <div>
@@ -85,15 +95,14 @@ function Game(props) {
   <div>
       {loading ? <p>Loading...</p>: <div>
         {(expiryTime < prepTime) ? <div>Expired, {expiryTime}, {prepTime}</div>: 
-        <div><div>
-      <p>{question.name}</p>
-      {question.responses.map(response => <button key={response} type="button" onClick={() => {checkAnswer(response, question.answer)}}>{response}</button>)}
-      </div>
-    <br/>
-    Correct Answers: {correctAnswers}
-    <div>
-    {(minutes.toString()).padStart(2, "0")}:{(seconds.toString()).padStart(2, "0")}
-    </div></div>}
+        <div>{(!isSetUp) ? <div><input value={username} onChange={(event) => setUsername(event.target.value)}/><button onClick={() => {setIsSetUp(true)}}>Submit</button></div>: <div>
+        <p>{question.name}</p>
+        {question.responses.map(response => <button key={response} type="button" onClick={() => {checkAnswer(response, question.answer)}}>{response}</button>)}
+        <br/>
+        Correct Answers: {correctAnswers}
+        {(minutes.toString()).padStart(2, "0")}:{(seconds.toString()).padStart(2, "0")}
+        </div>}
+    </div>}
     </div>}
       
     </div>}

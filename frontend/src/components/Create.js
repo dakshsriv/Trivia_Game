@@ -20,7 +20,7 @@ function Create(props) {
     const requestParams = {"name": name, "answer": answer, "responses": responses, "category": category};
     console.log(requestParams)
     if (answer !== "") {
-    axios.post("http://127.0.0.1:8000/api/", requestParams).then(res => console.log(res.data));
+    axios.post("http://127.0.0.1:8000/api/questions/", requestParams).then(res => console.log(res.data));
     return props.callBackFunction();
   }
     else {

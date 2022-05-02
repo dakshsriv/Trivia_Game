@@ -47,7 +47,7 @@ function App(props) {
         {categories.map(category => <option key={category} value={category}>{category}</option>)}
       </select>
       <input type="text" onChange={(event) => setExpireTime(event.target.value)}/>
-      <button onClick={() => {const requestStr = ["http://localhost:8000/api/",categorySend].join("");axios.get(requestStr, {category:categorySend}).then((res) => {
+      <button onClick={() => {const requestStr = ["http://localhost:8000/api/questions/",categorySend].join("");axios.get(requestStr, {category:categorySend}).then((res) => {
         const requestParams = {"id":makeId(7),"expiryTime":expireTimeFin,"questions":res.data};
         console.log(requestParams);
         axios.post("http://localhost:8000/api/games/", requestParams).then(res => console.log(res.data));} //Finish this
