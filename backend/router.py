@@ -165,7 +165,7 @@ async def post_question(request: Request, player: PlayerModel = Body(...)):
     for doc in await request.app.mongodb["Players"].find().to_list(length=10000):
         names.append(doc["_id"])
     if player["_id"] in names:
-        return {"ErrorValue":"Name already created"}
+        return "Name exists"
     new_player = await request.app.mongodb["Players"].insert_one(player)
     created_player = await request.app.mongodb["Players"].find_one(
         {"_id": new_player.inserted_id}

@@ -91,24 +91,28 @@ class UpdateGameModel(BaseModel):
 class PlayerModel(BaseModel):
     id: str = Field(..., alias="_id")
     score: int = Field(...)
+    total: int = Field(...)
 
     class Config:
         allow_population_by_field_name = True
         schema_extra = {
             "example": {
                 "_id":"Winner",
-                "score":24
+                "score":24,
+                "total":30
             }
     }
 
 
 class UpdatePlayerModel(BaseModel):
     score: int = Field(...)
+    total: int = Field(...)
 
     class Config:
         allow_population_by_field_name = True
         schema_extra = {
             "example": {
-                "score":22
+                "score":22,
+                "total":24
             }
     }
