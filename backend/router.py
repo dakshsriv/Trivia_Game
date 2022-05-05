@@ -146,11 +146,13 @@ async def get_games(request: Request):
         links[doc["_id"]] = doc["questions"]
     return links
 
-@router.get("/api/players/", response_description="List all players")
-async def get_games(request: Request):
+@router.get("/api/players/byGame/{game}", response_description="List all players of one game")
+async def get_games(request: Request, game: str):
     players = list()
     for doc in await request.app.mongodb["Players"].find().to_list(length=10000):
-        players.append(doc)
+        if doc["game"] == game:
+            players.append(doc)
+    players_sorted = sorted(players, key=lambda x:x["score"])
     return players
 
 @router.get("/api/players/{id}", response_description="List one player")

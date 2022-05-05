@@ -21,10 +21,8 @@ function Game(props) {
   initTime.setSeconds(initTime.getSeconds() + length*10);
   const expiryTimestamp = initTime
 
-
-  
   function sendAnswer() {
-    const sendDict = {"_id": username, "score": correctAnswers, "total":questions.length}
+    const sendDict = {"_id": username, "score": correctAnswers, "total":questions.length, "game":gameLink}
     console.log("reached")
     axios.post("http://localhost:8000/api/players/", sendDict).then(res => {
       if (res.data !== "Name exists") {setIsEndScreen(true);setIsSendScreen(false);}
