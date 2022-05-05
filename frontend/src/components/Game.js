@@ -18,8 +18,11 @@ function Game(props) {
   const [expiryTime, setExpiryTime] = useState(0);
   const initTime = new Date();
   const prepTime = Date.parse(initTime);
+  const [players, setPlayers] = useState([])
   initTime.setSeconds(initTime.getSeconds() + length*10);
-  const expiryTimestamp = initTime
+  const expiryTimestamp = initTime;
+  var gameExpiryD = new Date(0);
+  const [gameExpiry, setGameExpiry] = useState()
 
   function sendAnswer() {
     const sendDict = {"_id": username, "score": correctAnswers, "total":questions.length, "game":gameLink}
@@ -34,18 +37,19 @@ function Game(props) {
     axios.get(requestStr, {id:gameLink}).then((response) => {
 
     if (response.data !== null) {
+    gameExpiryD.setUTCSeconds(response.data.expiryTime)
     setQuestions(response.data.questions);
     setQuestion(response.data.questions[0]);
     setLength(response.data.questions.length);
-    setLoading(false);
     setExpiryTime(response.data.expiryTime) }
-    else {
-      setLoading(false)
-    }
     });
+
+    const requestStr2 = ["http://localhost:8000/api/players/byGame/",gameLink].join("");
+    axios.get(requestStr2, {game:gameLink}).then(response => {setPlayers(response.data);})
     start();}})
 
   useEffect(() => {if (username !== "") {sendAnswer();}}, [isEndScreen])
+  useEffect(() => {setLoading(false);console.log(players);}, [players])
 
 
   const {
@@ -92,12 +96,15 @@ function Game(props) {
       {isSendScreen ? <div><input value={username} onChange={(event) => setUsername(event.target.value)}/><button onClick={sendAnswer}>Submit</button></div>: 
       <div>{isEndScreen ? 
         <div>
-          You got {correctAnswers}/{length} correct.
+          Answer recorded successfully. The final results will be published at {gameExpiryD.toString()}. 
           <Link to="/"><button onClick={props.callBackFunction}>Return to home</button></Link>
       </div> : 
       <div>
           {loading ? <p>Loading...</p>: <div>
-            {(expiryTime < prepTime) ? <div>Expired, {expiryTime}, {prepTime}</div>: 
+            {(expiryTime < prepTime) ? <div>
+              {console.log(players.length)}
+              {players.map(player => <p key={player._id}>Player {player._id} got {player.score} out of {player.total} in game {player.game}</p>)}
+            </div>: 
             <div>
             <p>{question.name}</p>
             {question.responses.map(response => <button key={response} type="button" onClick={() => {checkAnswer(response, question.answer)}}>{response}</button>)}

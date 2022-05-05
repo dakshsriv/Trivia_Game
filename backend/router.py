@@ -153,7 +153,8 @@ async def get_games(request: Request, game: str):
         if doc["game"] == game:
             players.append(doc)
     players_sorted = sorted(players, key=lambda x:x["score"])
-    return players
+    players_sorted.reverse()
+    return players_sorted
 
 @router.get("/api/players/{id}", response_description="List one player")
 async def get_games(id : str, request: Request):
