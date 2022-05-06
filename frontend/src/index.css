@@ -6,94 +6,18 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: white;
-  
-}
-
-code {
-  font-family: helvetica, source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-h1 {
-  color: white;
-  text-align: center;
-}
-
-textArea {
-  background-color: rgb(117, 117, 117);
   color: rgb(0, 0, 0);
-}
-
-.topHeader {
-  animation-name: animateTopHeader;
-	animation-duration: 5s;
-	animation-iteration-count: infinite;
-	animation-direction: alternate;
-	animation-timing-function: linear;  color: white;
-  width: 100vw;
-  font-size: 8vh;
-  text-align: center;
-  padding: 30px;
-  margin-top: 0px;
-  margin-bottom: 10px;
-}
-
-@keyframes animateTopHeader {
-	0% {
-		background: #ff1a1a;
-	}
-	33% {
-		background: #ffff00;
-	}
-	67% {
-		background: #00ff00;
-	}
-	100% {
-		background: #0000ff;
-	}
-}
-
-.questionNumberBox {
-  width: 100px;
-  font-size: 80px;
-  color: white;
   
 }
 
-.entryListBox {
-  border: 3px solid rgb(0, 0, 240);
-  border-radius: 25px;
-  width: 94vw;
-  margin: 10px;
-  padding: 15px;
-  background-color: black;
-}
-
-.entryBox {
-  border: 3px solid rgb(240, 128, 0);
-  border-radius: 25px;
-  width: 90vw;
-  margin: 10px;
-  padding: 15px;
-  font-size: 20px;
-  background-color: black;
+h2 {
   color: white;
 }
 
-.createBox {
-  border: 3px solid rgb(240, 128, 0);
-  border-radius: 25px;
-  width: 94vw;
-  margin: 10px;
-  padding: 15px;
-  font-size: 20px;
-  background-color: rgb(71, 71, 71);
+h3 {
   color: white;
-  text-align: center;
 }
 
-.bigTextSize {
-  font-size: 100px;
+h5 {
+  color: white;
 }
-

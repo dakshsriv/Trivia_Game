@@ -88,6 +88,18 @@ function Game(props) {
 
   //<input value={username} onChange={(event) => setUsername(event.target.value)}/><button onClick={() => {setIsSetUp(true)}}>Submit</button>
 
+  function getType(response, responseList) {
+    const ix = responseList.findIndex(response);
+    if (ix === 1) {
+      return "success"
+    }
+    if (ix === 2) {
+      return "warning"
+    }
+    if (ix === 3) {
+      return "error"
+    }
+  }
   return (
   <div>
     {props.point}
@@ -106,11 +118,11 @@ function Game(props) {
               {players.map(player => <p key={player._id}>Player {player._id} got {player.score} out of {player.total} in game {player.game}</p>)}
             </div>: 
             <div>
-            <p>{question.name}</p>
+            <h2>{question.name}</h2>
             {question.responses.map(response => <button key={response} type="button" onClick={() => {checkAnswer(response, question.answer)}}>{response}</button>)}
             <br/>
             Correct Answers: {correctAnswers}
-            {(minutes.toString()).padStart(2, "0")}:{(seconds.toString()).padStart(2, "0")}
+            <h3>Time left: {(minutes.toString()).padStart(2, "0")}:{(seconds.toString()).padStart(2, "0")}</h3>
             </div>}
         </div>}
           

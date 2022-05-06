@@ -14,4 +14,6 @@ ReactDOM.render(
       <Route exact path="/game/:gameLink" element={<Game/>} />
     </Routes>
   </BrowserRouter>
+  <br/>
+  <h5>Copyright 2022 Daksh Srivastava</h5>
 </StrictMode>, document.getElementById('root'))
