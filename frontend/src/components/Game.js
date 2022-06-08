@@ -24,6 +24,7 @@ function Game(props) {
   var gameExpiryD = new Date(0);
   const [gameExpiry, setGameExpiry] = useState()
 
+  
   function sendAnswer() {
     const sendDict = {"_id": username, "score": correctAnswers, "total":questions.length, "game":gameLink}
     console.log("reached")
@@ -51,7 +52,6 @@ function Game(props) {
   useEffect(() => {if (username !== "") {sendAnswer();}}, [isEndScreen])
   useEffect(() => {setLoading(false);console.log(players);}, [players])
 
-
   const {
     seconds,
     minutes,
@@ -66,6 +66,8 @@ function Game(props) {
     expiryTimestamp,
     onExpire: () => console.warn("onExpire called")
   });
+
+  useEffect(() => {console.log(isEndScreen, isSendScreen, questions, question, (!question && !loading), loading, (expiryTime < prepTime))}, [seconds])
 
   const checkAnswer = (response, answer) => {
     console.log("checking")
@@ -108,12 +110,15 @@ function Game(props) {
       {isSendScreen ? <div><input value={username} onChange={(event) => setUsername(event.target.value)}/><button onClick={sendAnswer}>Submit</button></div>: 
       <div>{isEndScreen ? 
         <div>
+        <div className="wText">
           Answer recorded successfully. The final results will be published at {gameExpiryD.toString()}. 
+          </div>
           <Link to="/"><button onClick={props.callBackFunction}>Return to home</button></Link>
       </div> : 
       <div>
           {loading ? <p>Loading...</p>: <div>
-            {(expiryTime < prepTime) ? <div>
+            {(expiryTime < prepTime) ? <div className="wText">
+              {console.log(expiryTime, prepTime)}
               {console.log(players.length)}
               {players.map(player => <p key={player._id}>Player {player._id} got {player.score} out of {player.total} in game {player.game}</p>)}
             </div>: 
