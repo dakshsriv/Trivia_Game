@@ -27,7 +27,6 @@ function Game(props) {
   
   function sendAnswer() {
     const sendDict = {"_id": username, "score": correctAnswers, "total":questions.length, "game":gameLink}
-    console.log("reached")
     axios.post("http://localhost:8000/api/players/", sendDict).then(res => {
       if (res.data !== "Name exists") {setIsEndScreen(true);setIsSendScreen(false);}
     });
@@ -38,11 +37,13 @@ function Game(props) {
     axios.get(requestStr, {id:gameLink}).then((response) => {
 
     if (response.data !== null) {
-    gameExpiryD.setUTCSeconds(response.data.expiryTime)
+    gameExpiryD.setUTCMilliseconds(response.data.expiryTime);
+    console.log("gameExpiry is:",gameExpiryD.toString());
     setQuestions(response.data.questions);
     setQuestion(response.data.questions[0]);
     setLength(response.data.questions.length);
-    setExpiryTime(response.data.expiryTime) }
+    setExpiryTime(response.data.expiryTime);
+    console.log("Received expiryTime is:", response.data.expiryTime) }
     });
 
     const requestStr2 = ["http://localhost:8000/api/players/byGame/",gameLink].join("");
@@ -67,8 +68,6 @@ function Game(props) {
     onExpire: () => console.warn("onExpire called")
   });
 
-  useEffect(() => {console.log(isEndScreen, isSendScreen, questions, question, (!question && !loading), loading, (expiryTime < prepTime))}, [seconds])
-
   const checkAnswer = (response, answer) => {
     console.log("checking")
     console.log(response, answer, length, questionIndex)
@@ -90,20 +89,9 @@ function Game(props) {
 
   //<input value={username} onChange={(event) => setUsername(event.target.value)}/><button onClick={() => {setIsSetUp(true)}}>Submit</button>
 
-  function getType(response, responseList) {
-    const ix = responseList.findIndex(response);
-    if (ix === 1) {
-      return "success"
-    }
-    if (ix === 2) {
-      return "warning"
-    }
-    if (ix === 3) {
-      return "error"
-    }
-  }
   return (
   <div>
+    {console.log()}
     {props.point}
     {(!question && !loading) ? <div>No questions <Link to="/"><button onClick={props.callBackFunction}>Return to home</button></Link></div> : 
     <div>
@@ -111,15 +99,16 @@ function Game(props) {
       <div>{isEndScreen ? 
         <div>
         <div className="wText">
+          {console.log(gameExpiryD.toString())}
           Answer recorded successfully. The final results will be published at {gameExpiryD.toString()}. 
+          {}
           </div>
           <Link to="/"><button onClick={props.callBackFunction}>Return to home</button></Link>
       </div> : 
       <div>
           {loading ? <p>Loading...</p>: <div>
             {(expiryTime < prepTime) ? <div className="wText">
-              {console.log(expiryTime, prepTime)}
-              {console.log(players.length)}
+              {console.log((expiryTime > prepTime))}
               {players.map(player => <p key={player._id}>Player {player._id} got {player.score} out of {player.total} in game {player.game}</p>)}
             </div>: 
             <div>

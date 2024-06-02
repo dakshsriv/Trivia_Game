@@ -10,6 +10,10 @@ body {
   
 }
 
+h1 {
+  color: white;
+}
+
 h2 {
   color: white;
 }
@@ -24,4 +28,13 @@ h5 {
 
 .wText {
   color: white;
+}
+
+.entryListBox {
+  border: 3px solid rgb(0, 0, 240);
+  border-radius: 25px;
+  width: 94vw;
+  margin: 10px;
+  padding: 15px;
+  background-color: black;
 }
